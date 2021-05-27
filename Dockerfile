@@ -1,12 +1,14 @@
-FROM python:latest
+FROM python:3.7
 
 # Env & Arg variables
-ARG USERNAME=pythonssh
-ARG USERPASS=sshpass
+ARG USERNAME=iais
+ARG USERPASS=?
+ARG ROOTPASS=?
+
 
 # Apt update & apt install required packages
 # whois: required for mkpasswd
-RUN apt update && apt -y install openssh-server whois
+RUN apt update && apt -y install openssh-server whois sudo
 
 # Add a non-root user & set password
 RUN useradd -ms /bin/bash $USERNAME
@@ -33,8 +35,13 @@ RUN mkdir /home/$USERNAME/.ssh && touch /home/$USERNAME/.ssh/authorized_keys
 USER root
 
 # Set volumes
-VOLUME /home/$USERNAME/.ssh
-VOLUME /etc/ssh
+# VOLUME /home/$USERNAME/.ssh
+# VOLUME /etc/ssh
+
+# set root and sudo 
+RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+RUN echo "root:$ROOTPASS" | chpasswd
+RUN echo "$USERNAME ALL=(ALL) ALL" >> /etc/sudoers
 
 # Run entrypoint
 CMD ["/entrypoint.sh"]

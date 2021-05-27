@@ -5,6 +5,8 @@
 This container provides the base Python container with a SSH server preinstalled that can be used
 to connect to the Python interpreter and upload files remotely, i.e. using PyCharm.
 
+目前指定了3.7版本。
+
 ## How does it work?
 
 By default, a non-root user, created on the Dockerfile, is used for normal operations.
@@ -20,7 +22,7 @@ docker run -d -p 2222:22 --name pythonssh davidlor/python-ssh
 - Change the `--name` "pythonssh" if you want
 
 ### Connecting with root
-
+我已经默认开启root权限。
 If required, root user can be connected through SSH. However, you must set root password manually, following these steps:
 
 - Enable root login on SSH (from within the container):
@@ -34,6 +36,7 @@ If required, root user can be connected through SSH. However, you must set root 
 - Now you can login with root through SSH
 
 ## Mountpoints
+我已经弃用通过Volumes挂载。
 
 Mountpoints are defined on Dockerfile, so volumes will be automatically created if you do not define them.
 
